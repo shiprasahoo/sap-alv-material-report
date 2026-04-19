@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SAP ALV Material Report</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: '72', Arial, sans-serif; background:#f5f6f7; color:#32363a; }
+
+  /* HEADER */
+  .shell-header {
+    background:#0a6ed1; color:#fff; padding:0 1.5rem;
+    height:3rem; display:flex; align-items:center; justify-content:space-between;
+    box-shadow:0 2px 4px rgba(0,0,0,0.2);
+  }
+  .shell-header h1 { font-size:1rem; font-weight:600; letter-spacing:.5px; }
+  .shell-header span { font-size:.8rem; opacity:.85; }
+
+  /* PAGE HEADER */
+  .page-header {
+    background:#fff; border-bottom:1px solid #d9d9d9;
+    padding:.75rem 1.5rem; display:flex; align-items:center; justify-content:space-between;
+  }
+  .page-header h2 { font-size:1.1rem; font-weight:600; }
+  .btn-group { display:flex; gap:.5rem; }
+  .btn {
+    padding:.4rem 1rem; border:1px solid #0a6ed1; border-radius:4px;
+    cursor:pointer; font-size:.85rem; font-family:inherit;
+  }
+  .btn-primary { background:#0a6ed1; color:#fff; }
+  .btn-primary:hover { background:#085caf; }
+  .btn-secondary { background:#fff; color:#0a6ed1; }
+  .btn-secondary:hover { background:#e8f1fb; }
+
+  /* MAIN CONTENT */
+  .content { padding:1rem 1.5rem; }
+
+  /* SUMMARY TILES */
+  .tiles { display:flex; gap:1rem; margin-bottom:1rem; flex-wrap:wrap; }
+  .tile {
+    background:#fff; border:1px solid #d9d9d9; border-radius:8px;
+    padding:1rem 1.5rem; min-width:160px; flex:1;
+    box-shadow:0 1px 3px rgba(0,0,0,.06); cursor:pointer; transition:.2s;
+  }
+  .tile:hover { box-shadow:0 3px 8px rgba(0,0,0,.12); transform:translateY(-1px); }
+  .tile-label { font-size:.75rem; color:#6a6d70; margin-bottom:.3rem; }
+  .tile-value { font-size:2rem; font-weight:700; }
+  .tile-sub { font-size:.75rem; color:#6a6d70; margin-top:.2rem; }
+  .good { color:#107e3e; }
+  .warning { color:#df6e0c; }
+  .error { color:#bb0000; }
+  .neutral { color:#0a6ed1; }
+
+  /* FILTER PANEL */
+  .filter-panel {
+    background:#fff; border:1px solid #d9d9d9; border-radius:8px;
+    padding:1rem; margin-bottom:1rem; box-shadow:0 1px 3px rgba(0,0,0,.06);
+  }
+  .filter-panel h3 {
+    font-size:.85rem; font-weight:600; margin-bottom:.75rem;
+    color:#32363a; display:flex; align-items:center; gap:.4rem;
+  }
+  .filter-row { display:flex; gap:1rem; flex-wrap:wrap; align-items:flex-end; }
+  .filter-group { display:flex; flex-direction:column; gap:.25rem; min-width:180px; }
+  .filter-group label { font-size:.75rem; color:#6a6d70; font-weight:600; }
+  .filter-group input, .filter-group select {
+    padding:.35rem .6rem; border:1px solid #89919a; border-radius:4px;
+    font-size:.85rem; font-family:inherit; background:#fff;
+  }
+  .filter-group input:focus, .filter-group select:focus {
+    outline:none; border-color:#0a6ed1; box-shadow:0 0 0 2px rgba(10,110,209,.15);
+  }
+
+  /* TABLE */
+  .table-panel {
+    background:#fff; border:1px solid #d9d9d9; border-radius:8px;
+    overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,.06);
+  }
+  .table-toolbar {
+    padding:.6rem 1rem; border-bottom:1px solid #e5e5e5;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .table-toolbar h3 { font-size:.9rem; font-weight:600; }
+  .row-count { font-size:.8rem; color:#6a6d70; }
+  table { width:100%; border-collapse:collapse; font-size:.85rem; }
+  thead tr { background:#f5f6f7; }
+  thead th {
+    padding:.6rem 1rem; text-align:left; font-weight:600;
+    font-size:.78rem; color:#32363a; border-bottom:2px solid #d9d9d9;
+    white-space:nowrap;
+  }
+  tbody tr { border-bottom:1px solid #f0f0f0; transition:.15s; }
+  tbody tr:hover { background:#f5f6f7; }
+  tbody tr:nth-child(even) { background:#fafafa; }
+  tbody tr:nth-child(even):hover { background:#f0f4f9; }
+  td { padding:.55rem 1rem; white-space:nowrap; }
+  .td-right { text-align:right; }
+
+  /* STATUS BADGES */
+  .badge {
+    display:inline-block; padding:.2rem .6rem; border-radius:10px;
+    font-size:.75rem; font-weight:600;
+  }
+  .badge-success { background:#f1fdf6; color:#107e3e; border:1px solid #abe1c4; }
+  .badge-warning { background:#fff8f0; color:#df6e0c; border:1px solid #f8c77e; }
+  .badge-error   { background:#fff0f0; color:#bb0000; border:1px solid #f5b8b8; }
+
+  /* EMPTY STATE */
+  .empty-state { text-align:center; padding:3rem; color:#89919a; }
+  .empty-state div { font-size:2.5rem; margin-bottom:.5rem; }
+
+  /* TOAST */
+  .toast {
+    position:fixed; bottom:1.5rem; left:50%; transform:translateX(-50%);
+    background:#32363a; color:#fff; padding:.6rem 1.4rem; border-radius:20px;
+    font-size:.85rem; opacity:0; transition:.3s; pointer-events:none; z-index:999;
+  }
+  .toast.show { opacity:1; }
+
+  @media(max-width:600px) {
+    .tiles { flex-direction:column; }
+    .filter-row { flex-direction:column; }
+    .filter-group { min-width:100%; }
+    td, th { padding:.4rem .6rem; font-size:.78rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- SHELL HEADER -->
+<div class="shell-header">
+  <h1>📦 SAP Material Report — Fiori App</h1>
+  <span>KIIT Capstone Project | SAP ABAP/Fiori Track</span>
+</div>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <h2>Custom ALV Material Stock Report</h2>
+  <div class="btn-group">
+    <button class="btn btn-secondary" onclick="resetFilters()">↺ Reset</button>
+    <button class="btn btn-primary"   onclick="exportCSV()">⬇ Export CSV</button>
+  </div>
+</div>
+
+<div class="content">
+
+  <!-- SUMMARY TILES -->
+  <div class="tiles">
+    <div class="tile" onclick="filterByStatus('')">
+      <div class="tile-label">Total Materials</div>
+      <div class="tile-value neutral" id="tileTotal">10</div>
+      <div class="tile-sub">All records</div>
+    </div>
+    <div class="tile" onclick="filterByStatus('Available')">
+      <div class="tile-label">Available</div>
+      <div class="tile-value good" id="tileAvailable">0</div>
+      <div class="tile-sub">In stock</div>
+    </div>
+    <div class="tile" onclick="filterByStatus('Low Stock')">
+      <div class="tile-label">Low Stock</div>
+      <div class="tile-value warning" id="tileLow">0</div>
+      <div class="tile-sub">Needs reorder</div>
+    </div>
+    <div class="tile" onclick="filterByStatus('Out of Stock')">
+      <div class="tile-label">Out of Stock</div>
+      <div class="tile-value error" id="tileOut">0</div>
+      <div class="tile-sub">Urgent reorder</div>
+    </div>
+  </div>
+
+  <!-- FILTER PANEL -->
+  <div class="filter-panel">
+    <h3>🔍 Search &amp; Filter</h3>
+    <div class="filter-row">
+      <div class="filter-group">
+        <label>MATERIAL ID</label>
+        <input type="text" id="filterMatId" placeholder="e.g. MAT-001" oninput="applyFilters()"/>
+      </div>
+      <div class="filter-group">
+        <label>DESCRIPTION</label>
+        <input type="text" id="filterDesc" placeholder="Search description..." oninput="applyFilters()"/>
+      </div>
+      <div class="filter-group">
+        <label>PLANT</label>
+        <select id="filterPlant" onchange="applyFilters()">
+          <option value="">All Plants</option>
+          <option value="PL01">PL01</option>
+          <option value="PL02">PL02</option>
+          <option value="PL03">PL03</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>CATEGORY</label>
+        <select id="filterCategory" onchange="applyFilters()">
+          <option value="">All Categories</option>
+          <option value="Raw Material">Raw Material</option>
+          <option value="Machinery">Machinery</option>
+          <option value="Safety Equipment">Safety Equipment</option>
+          <option value="Tools">Tools</option>
+          <option value="Plumbing">Plumbing</option>
+          <option value="Electrical">Electrical</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>STATUS</label>
+        <select id="filterStatus" onchange="applyFilters()">
+          <option value="">All Status</option>
+          <option value="Available">Available</option>
+          <option value="Low Stock">Low Stock</option>
+          <option value="Out of Stock">Out of Stock</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- DATA TABLE -->
+  <div class="table-panel">
+    <div class="table-toolbar">
+      <h3>Material List</h3>
+      <span class="row-count" id="rowCount">Showing 10 record(s)</span>
+    </div>
+    <div style="overflow-x:auto">
+      <table>
+        <thead>
+          <tr>
+            <th>Material ID</th>
+            <th>Description</th>
+            <th>Plant</th>
+            <th>Category</th>
+            <th class="td-right">Quantity</th>
+            <th>Unit</th>
+            <th class="td-right">Price (₹)</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+const ALL_DATA = [
+  { materialId:"MAT-001", description:"Steel Plate 10mm",    plant:"PL01", category:"Raw Material",      quantity:250, unit:"KG",  price:4500,  status:"Available"    },
+  { materialId:"MAT-002", description:"Copper Wire 2.5mm",   plant:"PL01", category:"Raw Material",      quantity:120, unit:"MTR", price:1800,  status:"Available"    },
+  { materialId:"MAT-003", description:"Hydraulic Pump A4",   plant:"PL02", category:"Machinery",         quantity:15,  unit:"EA",  price:32000, status:"Low Stock"    },
+  { materialId:"MAT-004", description:"Safety Helmet IS",    plant:"PL02", category:"Safety Equipment",  quantity:0,   unit:"EA",  price:650,   status:"Out of Stock" },
+  { materialId:"MAT-005", description:"Aluminium Sheet 3mm", plant:"PL01", category:"Raw Material",      quantity:400, unit:"KG",  price:3200,  status:"Available"    },
+  { materialId:"MAT-006", description:"Electric Motor 5HP",  plant:"PL03", category:"Machinery",         quantity:8,   unit:"EA",  price:18500, status:"Low Stock"    },
+  { materialId:"MAT-007", description:"PVC Pipe 1 inch",     plant:"PL03", category:"Plumbing",          quantity:500, unit:"MTR", price:120,   status:"Available"    },
+  { materialId:"MAT-008", description:"Drill Bit Set 13pc",  plant:"PL02", category:"Tools",             quantity:0,   unit:"SET", price:2200,  status:"Out of Stock" },
+  { materialId:"MAT-009", description:"Welding Rod 3.15mm",  plant:"PL01", category:"Raw Material",      quantity:900, unit:"KG",  price:890,   status:"Available"    },
+  { materialId:"MAT-010", description:"Control Panel 440V",  plant:"PL03", category:"Electrical",        quantity:5,   unit:"EA",  price:45000, status:"Low Stock"    }
+];
+
+let filtered = [...ALL_DATA];
+
+function renderTable(data) {
+  const tbody = document.getElementById("tableBody");
+  if (data.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="8"><div class="empty-state"><div>🔍</div>No records found</div></td></tr>`;
+    return;
+  }
+  tbody.innerHTML = data.map(r => `
+    <tr>
+      <td><b>${r.materialId}</b></td>
+      <td>${r.description}</td>
+      <td>${r.plant}</td>
+      <td>${r.category}</td>
+      <td class="td-right">${r.quantity.toLocaleString()}</td>
+      <td>${r.unit}</td>
+      <td class="td-right">₹${r.price.toLocaleString()}</td>
+      <td>${badgeHTML(r.status)}</td>
+    </tr>`).join("");
+}
+
+function badgeHTML(status) {
+  const cls = status === "Available" ? "badge-success"
+            : status === "Low Stock" ? "badge-warning"
+            : "badge-error";
+  return `<span class="badge ${cls}">${status}</span>`;
+}
+
+function updateTiles(data) {
+  document.getElementById("tileTotal").textContent     = data.length;
+  document.getElementById("tileAvailable").textContent = data.filter(r => r.status === "Available").length;
+  document.getElementById("tileLow").textContent       = data.filter(r => r.status === "Low Stock").length;
+  document.getElementById("tileOut").textContent       = data.filter(r => r.status === "Out of Stock").length;
+  document.getElementById("rowCount").textContent      = `Showing ${data.length} record(s)`;
+}
+
+function applyFilters() {
+  const matId    = document.getElementById("filterMatId").value.toLowerCase();
+  const desc     = document.getElementById("filterDesc").value.toLowerCase();
+  const plant    = document.getElementById("filterPlant").value;
+  const category = document.getElementById("filterCategory").value;
+  const status   = document.getElementById("filterStatus").value;
+
+  filtered = ALL_DATA.filter(r =>
+    (!matId    || r.materialId.toLowerCase().includes(matId))   &&
+    (!desc     || r.description.toLowerCase().includes(desc))   &&
+    (!plant    || r.plant === plant)                             &&
+    (!category || r.category === category)                      &&
+    (!status   || r.status === status)
+  );
+  renderTable(filtered);
+  updateTiles(filtered);
+}
+
+function filterByStatus(status) {
+  document.getElementById("filterStatus").value = status;
+  applyFilters();
+  showToast(status ? `Filtered: ${status}` : "Showing all records");
+}
+
+function resetFilters() {
+  document.getElementById("filterMatId").value    = "";
+  document.getElementById("filterDesc").value     = "";
+  document.getElementById("filterPlant").value    = "";
+  document.getElementById("filterCategory").value = "";
+  document.getElementById("filterStatus").value   = "";
+  applyFilters();
+  showToast("Filters cleared!");
+}
+
+function exportCSV() {
+  const headers = "Material ID,Description,Plant,Category,Quantity,Unit,Price,Status\n";
+  const rows = filtered.map(r =>
+    `${r.materialId},${r.description},${r.plant},${r.category},${r.quantity},${r.unit},${r.price},${r.status}`
+  ).join("\n");
+  const blob = new Blob([headers + rows], { type:"text/csv" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "MaterialReport.csv";
+  a.click();
+  showToast("CSV exported successfully!");
+}
+
+function showToast(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), 2500);
+}
+
+// Init
+renderTable(ALL_DATA);
+updateTiles(ALL_DATA);
+</script>
+</body>
+</html>

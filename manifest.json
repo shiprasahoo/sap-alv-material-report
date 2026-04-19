@@ -1,0 +1,54 @@
+{
+  "_version": "1.12.0",
+  "sap.app": {
+    "id": "materialreport",
+    "type": "application",
+    "title": "SAP ALV Material Report",
+    "description": "A custom SAP Fiori-style Material Stock Report simulating an ABAP ALV Grid. Built using HTML5, CSS3 and JavaScript following SAP Fiori design guidelines.",
+    "applicationVersion": {
+      "version": "1.0.0"
+    },
+    "tags": {
+      "keywords": ["SAP", "Fiori", "ABAP", "ALV", "Material", "Report"]
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "rootView": "materialreport.view.Main",
+    "dependencies": {
+      "libs": {
+        "sap.m": {},
+        "sap.ui.table": {},
+        "sap.ui.core": {}
+      }
+    },
+    "models": {
+      "materials": {
+        "type": "sap.ui.model.json.JSONModel",
+        "uri": "model/data.json"
+      }
+    },
+    "routing": {
+      "routes": [
+        {
+          "name": "main",
+          "pattern": "",
+          "target": "main"
+        }
+      ],
+      "targets": {
+        "main": {
+          "viewName": "Main",
+          "viewLevel": 1
+        }
+      }
+    }
+  }
+}

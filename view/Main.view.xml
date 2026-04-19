@@ -1,0 +1,253 @@
+<!--
+  Main.view.xml
+  SAP Fiori XML View - Material Stock Report
+  Follows SAP MVC pattern with OpenUI5 conventions
+  KIIT Capstone Project - SAP ABAP/Fiori Track
+-->
+<mvc:View
+    controllerName="materialreport.controller.Main"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:table="sap.ui.table"
+    displayBlock="true">
+
+    <!--
+        NOTE: This XML view defines the UI structure.
+        In a real SAP system, this would connect to
+        an OData service via SAP Gateway.
+        Here we use a JSON model to simulate the backend.
+    -->
+
+    <Shell id="shell">
+        <App id="app">
+            <pages>
+                <Page id="mainPage"
+                    title="SAP Custom ALV Material Report"
+                    showHeader="true">
+
+                    <!-- ACTION BUTTONS IN HEADER -->
+                    <headerContent>
+                        <Button
+                            text="Reset Filters"
+                            icon="sap-icon://refresh"
+                            press="onReset"
+                            type="Default"/>
+                        <Button
+                            text="Export CSV"
+                            icon="sap-icon://download"
+                            press="onExport"
+                            type="Emphasized"/>
+                    </headerContent>
+
+                    <content>
+                        <!-- SUMMARY TILES -->
+                        <HBox
+                            justifyContent="SpaceBetween"
+                            wrap="Wrap"
+                            class="sapUiSmallMargin">
+
+                            <GenericTile
+                                header="Total Materials"
+                                subheader="All records"
+                                press="onTilePress"
+                                class="sapUiSmallMarginEnd">
+                                <tileContent>
+                                    <TileContent>
+                                        <content>
+                                            <NumericContent
+                                                value="{appModel>/totalCount}"
+                                                icon="sap-icon://product"/>
+                                        </content>
+                                    </TileContent>
+                                </tileContent>
+                            </GenericTile>
+
+                            <GenericTile
+                                header="Available"
+                                subheader="In stock"
+                                press="onTilePress"
+                                class="sapUiSmallMarginEnd">
+                                <tileContent>
+                                    <TileContent>
+                                        <content>
+                                            <NumericContent
+                                                value="{appModel>/availableCount}"
+                                                valueColor="Good"
+                                                icon="sap-icon://accept"/>
+                                        </content>
+                                    </TileContent>
+                                </tileContent>
+                            </GenericTile>
+
+                            <GenericTile
+                                header="Low Stock"
+                                subheader="Needs reorder"
+                                press="onTilePress"
+                                class="sapUiSmallMarginEnd">
+                                <tileContent>
+                                    <TileContent>
+                                        <content>
+                                            <NumericContent
+                                                value="{appModel>/lowCount}"
+                                                valueColor="Critical"
+                                                icon="sap-icon://warning"/>
+                                        </content>
+                                    </TileContent>
+                                </tileContent>
+                            </GenericTile>
+
+                            <GenericTile
+                                header="Out of Stock"
+                                subheader="Urgent reorder"
+                                press="onTilePress">
+                                <tileContent>
+                                    <TileContent>
+                                        <content>
+                                            <NumericContent
+                                                value="{appModel>/outCount}"
+                                                valueColor="Critical"
+                                                icon="sap-icon://error"/>
+                                        </content>
+                                    </TileContent>
+                                </tileContent>
+                            </GenericTile>
+
+                        </HBox>
+
+                        <!-- FILTER BAR -->
+                        <Panel
+                            headerText="Search and Filter"
+                            expandable="true"
+                            expanded="true"
+                            class="sapUiSmallMargin">
+                            <content>
+                                <HBox wrap="Wrap" class="sapUiSmallMargin">
+                                    <VBox class="sapUiSmallMarginEnd">
+                                        <Label text="Material ID" labelFor="filterMatId"/>
+                                        <Input
+                                            id="filterMatId"
+                                            placeholder="e.g. MAT-001"
+                                            liveChange="onFilter"
+                                            width="12rem"/>
+                                    </VBox>
+                                    <VBox class="sapUiSmallMarginEnd">
+                                        <Label text="Description" labelFor="filterDesc"/>
+                                        <Input
+                                            id="filterDesc"
+                                            placeholder="Search..."
+                                            liveChange="onFilter"
+                                            width="16rem"/>
+                                    </VBox>
+                                    <VBox class="sapUiSmallMarginEnd">
+                                        <Label text="Plant" labelFor="filterPlant"/>
+                                        <Select id="filterPlant" change="onFilter" width="10rem">
+                                            <items>
+                                                <core:Item key="" text="All Plants"/>
+                                                <core:Item key="PL01" text="PL01"/>
+                                                <core:Item key="PL02" text="PL02"/>
+                                                <core:Item key="PL03" text="PL03"/>
+                                            </items>
+                                        </Select>
+                                    </VBox>
+                                    <VBox class="sapUiSmallMarginEnd">
+                                        <Label text="Status" labelFor="filterStatus"/>
+                                        <Select id="filterStatus" change="onFilter" width="12rem">
+                                            <items>
+                                                <core:Item key="" text="All Status"/>
+                                                <core:Item key="Available" text="Available"/>
+                                                <core:Item key="Low Stock" text="Low Stock"/>
+                                                <core:Item key="Out of Stock" text="Out of Stock"/>
+                                            </items>
+                                        </Select>
+                                    </VBox>
+                                </HBox>
+                            </content>
+                        </Panel>
+
+                        <!-- MAIN DATA TABLE -->
+                        <Panel class="sapUiSmallMargin">
+                            <content>
+                                <table:Table
+                                    id="materialTable"
+                                    rows="{appModel>/filteredMaterials}"
+                                    visibleRowCount="10"
+                                    selectionMode="MultiToggle"
+                                    alternateRowColors="true"
+                                    width="100%">
+
+                                    <table:toolbar>
+                                        <Toolbar>
+                                            <Title text="Material List" level="H3"/>
+                                            <ToolbarSpacer/>
+                                            <Text id="rowCountText" text=""/>
+                                        </Toolbar>
+                                    </table:toolbar>
+
+                                    <table:columns>
+                                        <table:Column width="10rem">
+                                            <Label text="Material ID"/>
+                                            <table:template>
+                                                <Text text="{appModel>materialId}" wrapping="false"/>
+                                            </table:template>
+                                        </table:Column>
+                                        <table:Column width="18rem">
+                                            <Label text="Description"/>
+                                            <table:template>
+                                                <Text text="{appModel>description}" wrapping="false"/>
+                                            </table:template>
+                                        </table:Column>
+                                        <table:Column width="8rem">
+                                            <Label text="Plant"/>
+                                            <table:template>
+                                                <Text text="{appModel>plant}" wrapping="false"/>
+                                            </table:template>
+                                        </table:Column>
+                                        <table:Column width="14rem">
+                                            <Label text="Category"/>
+                                            <table:template>
+                                                <Text text="{appModel>category}" wrapping="false"/>
+                                            </table:template>
+                                        </table:Column>
+                                        <table:Column width="9rem" hAlign="End">
+                                            <Label text="Quantity"/>
+                                            <table:template>
+                                                <Text text="{appModel>quantity}" wrapping="false"/>
+                                            </table:template>
+                                        </table:Column>
+                                        <table:Column width="7rem">
+                                            <Label text="Unit"/>
+                                            <table:template>
+                                                <Text text="{appModel>unit}" wrapping="false"/>
+                                            </table:template>
+                                        </table:Column>
+                                        <table:Column width="11rem" hAlign="End">
+                                            <Label text="Price (INR)"/>
+                                            <table:template>
+                                                <Text text="{appModel>price}" wrapping="false"/>
+                                            </table:template>
+                                        </table:Column>
+                                        <table:Column width="13rem">
+                                            <Label text="Status"/>
+                                            <table:template>
+                                                <ObjectStatus
+                                                    text="{appModel>status}"
+                                                    state="{
+                                                        path: 'appModel>status',
+                                                        formatter: 'materialreport.utils.formatter.statusState'
+                                                    }"/>
+                                            </table:template>
+                                        </table:Column>
+                                    </table:columns>
+
+                                </table:Table>
+                            </content>
+                        </Panel>
+
+                    </content>
+                </Page>
+            </pages>
+        </App>
+    </Shell>
+
+</mvc:View>

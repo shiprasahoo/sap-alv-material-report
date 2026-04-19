@@ -1,0 +1,62 @@
+/**
+ * style.css
+ * Custom styles for SAP ALV Material Report
+ * Extends SAP Fiori / OpenUI5 base theme
+ * KIIT Capstone Project - SAP ABAP/Fiori Track
+ */
+
+/* ── SHELL & LAYOUT ─────────────────────────────── */
+.sapUiBody {
+    background-color: #f5f6f7;
+    font-family: '72', Arial, sans-serif;
+}
+
+/* ── SUMMARY TILES ──────────────────────────────── */
+.sapMGT {
+    min-width: 160px;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.sapMGT:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+    cursor: pointer;
+}
+
+/* ── FILTER PANEL ───────────────────────────────── */
+.sapMPanel {
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+/* ── TABLE ──────────────────────────────────────── */
+.sapUiTable {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.sapUiTableColHdrCnt {
+    background-color: #f5f6f7;
+    font-weight: 600;
+}
+
+/* ── STATUS COLORS ──────────────────────────────── */
+.sapMObjStatusSuccess .sapMObjStatusText { color: #107e3e; font-weight: 600; }
+.sapMObjStatusWarning .sapMObjStatusText { color: #df6e0c; font-weight: 600; }
+.sapMObjStatusError   .sapMObjStatusText { color: #bb0000; font-weight: 600; }
+
+/* ── BUTTONS ────────────────────────────────────── */
+.sapMBtnEmphasized {
+    background-color: #0a6ed1;
+    border-color: #0a6ed1;
+}
+.sapMBtnEmphasized:hover {
+    background-color: #085caf;
+}
+
+/* ── RESPONSIVE ─────────────────────────────────── */
+@media (max-width: 600px) {
+    .sapMGT { min-width: 140px; }
+}

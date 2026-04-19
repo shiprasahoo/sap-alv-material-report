@@ -1,0 +1,121 @@
+{
+  "metadata": {
+    "reportTitle": "Custom ALV Material Stock Report",
+    "generatedBy": "SAP ABAP Fiori Application",
+    "version": "1.0.0",
+    "plant": "All Plants",
+    "reportDate": "2026-04-19"
+  },
+  "materials": [
+    {
+      "materialId": "MAT-001",
+      "description": "Steel Plate 10mm",
+      "plant": "PL01",
+      "category": "Raw Material",
+      "quantity": 250,
+      "unit": "KG",
+      "price": 4500.00,
+      "status": "Available",
+      "lastUpdated": "2026-04-15"
+    },
+    {
+      "materialId": "MAT-002",
+      "description": "Copper Wire 2.5mm",
+      "plant": "PL01",
+      "category": "Raw Material",
+      "quantity": 120,
+      "unit": "MTR",
+      "price": 1800.00,
+      "status": "Available",
+      "lastUpdated": "2026-04-16"
+    },
+    {
+      "materialId": "MAT-003",
+      "description": "Hydraulic Pump A4",
+      "plant": "PL02",
+      "category": "Machinery",
+      "quantity": 15,
+      "unit": "EA",
+      "price": 32000.00,
+      "status": "Low Stock",
+      "lastUpdated": "2026-04-14"
+    },
+    {
+      "materialId": "MAT-004",
+      "description": "Safety Helmet IS",
+      "plant": "PL02",
+      "category": "Safety Equipment",
+      "quantity": 0,
+      "unit": "EA",
+      "price": 650.00,
+      "status": "Out of Stock",
+      "lastUpdated": "2026-04-10"
+    },
+    {
+      "materialId": "MAT-005",
+      "description": "Aluminium Sheet 3mm",
+      "plant": "PL01",
+      "category": "Raw Material",
+      "quantity": 400,
+      "unit": "KG",
+      "price": 3200.00,
+      "status": "Available",
+      "lastUpdated": "2026-04-17"
+    },
+    {
+      "materialId": "MAT-006",
+      "description": "Electric Motor 5HP",
+      "plant": "PL03",
+      "category": "Machinery",
+      "quantity": 8,
+      "unit": "EA",
+      "price": 18500.00,
+      "status": "Low Stock",
+      "lastUpdated": "2026-04-13"
+    },
+    {
+      "materialId": "MAT-007",
+      "description": "PVC Pipe 1 inch",
+      "plant": "PL03",
+      "category": "Plumbing",
+      "quantity": 500,
+      "unit": "MTR",
+      "price": 120.00,
+      "status": "Available",
+      "lastUpdated": "2026-04-18"
+    },
+    {
+      "materialId": "MAT-008",
+      "description": "Drill Bit Set 13pc",
+      "plant": "PL02",
+      "category": "Tools",
+      "quantity": 0,
+      "unit": "SET",
+      "price": 2200.00,
+      "status": "Out of Stock",
+      "lastUpdated": "2026-04-09"
+    },
+    {
+      "materialId": "MAT-009",
+      "description": "Welding Rod 3.15mm",
+      "plant": "PL01",
+      "category": "Raw Material",
+      "quantity": 900,
+      "unit": "KG",
+      "price": 890.00,
+      "status": "Available",
+      "lastUpdated": "2026-04-18"
+    },
+    {
+      "materialId": "MAT-010",
+      "description": "Control Panel 440V",
+      "plant": "PL03",
+      "category": "Electrical",
+      "quantity": 5,
+      "unit": "EA",
+      "price": 45000.00,
+      "status": "Low Stock",
+      "lastUpdated": "2026-04-12"
+    }
+  ]
+}
