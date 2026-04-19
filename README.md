@@ -51,4 +51,57 @@ A clean Fiori-style report app that lets users:
 | ⚡ Offline Ready | No internet/CDN required to run |
 
 ---
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Technology |
+|---|---|
+| UI | HTML5, CSS3, JavaScript (ES5) |
+| Design System | SAP Fiori / OpenUI5 guidelines |
+| Architecture | MVC (Model-View-Controller) |
+| Data | JSON (simulates SAP OData service) |
+| Tools | VS Code, Node.js, Git, GitHub |
+
+---
+
+## 🧠 SAP Concepts Demonstrated
+
+| SAP Concept | How it's shown here |
+|---|---|
+| ABAP ALV Grid Report | Filterable data table with export |
+| ABAP Internal Table | `data.json` material dataset |
+| ABAP CASE Statement | `formatter.js` status function |
+| SAP Traffic Light (Ampel) | Green / Orange / Red badges |
+| ALV Download | CSV export with dated filename |
+| SAP Fiori UX | Blue header, tiles, typography |
+| MVC Pattern | Component → View → Controller |
+
+---
+
+## 📊 Sample Data
+
+10 material records across 3 plants (PL01, PL02, PL03):
+
+| Material ID | Description | Plant | Status |
+|---|---|---|---|
+| MAT-001 | Steel Plate 10mm | PL01 | ✅ Available |
+| MAT-003 | Hydraulic Pump A4 | PL02 | ⚠️ Low Stock |
+| MAT-004 | Safety Helmet IS | PL02 | ❌ Out of Stock |
+| MAT-006 | Electric Motor 5HP | PL03 | ⚠️ Low Stock |
+| MAT-008 | Drill Bit Set 13pc | PL02 | ❌ Out of Stock |
+
+---
+
+## 🔮 Future Scope
+
+- 🔗 Connect to real SAP OData backend via SAP Gateway
+- 📈 Add bar/pie charts for stock distribution
+- 🔔 Auto reorder alerts when stock hits threshold
+- 👤 Role-based access (Manager vs Warehouse Staff)
+- 🌍 Multi-language support (SAP i18n)
+
+---
+
+
 
